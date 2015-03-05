@@ -1,0 +1,142 @@
+.qv-object-CrossSelling div.qv-object-content-container {
+	overflow: auto;
+}
+
+.qv-object-CrossSelling .OnlyA {
+    border-radius: 100%;
+    float: left;
+    background-color: rgba(102,37,5,0.8);
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .OnlyB {
+    border-radius: 100%;
+    float: right;
+    background-color: rgba(179,74,2,0.8); 
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .OnlyC {
+    border-radius: 100%;
+    float: none;
+    background-color: rgba(251,158,44,0.7); 
+    vertical-align: bottom;
+}
+
+.qv-object-CrossSelling .TextA {
+    font-size: large;
+    text-align: left;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: white;
+    text-indent: 0%;
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .TextB {
+    font-size: large;
+    text-align: right;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: white;
+    text-indent: 0%;
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .TextC {
+    font-size: large;
+    text-align: right;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: white;
+    text-indent: 0%;
+    vertical-align: middle;
+}
+
+
+.qv-object-CrossSelling .TextAB {
+    font-size: large;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: white;
+    text-indent: 0%;
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .TextAC {
+    font-size: large;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: white;
+    text-indent: 0%;
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .TextBC {
+    font-size: large;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: white;
+    text-indent: 0%;
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .TextABC {
+    font-size: large;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: white;
+    text-indent: 0%;
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .Error3Values {
+    font-size: large;
+    text-align: center;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: red;
+    text-indent: 0%;
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .TextLegendA {
+    font-size: large;
+    text-align: center;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: rgb(102,37,5);
+    text-indent: 0%;
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .TextLegendB {
+    font-size: large;
+    text-align: center;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: rgb(179,74,2);
+    text-indent: 0%;
+    vertical-align: middle;
+}
+
+.qv-object-CrossSelling .TextLegendC {
+    font-size: large;
+    text-align: center;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: rgb(251,158,44);
+    text-indent: 0%;
+    vertical-align: middle;
+}

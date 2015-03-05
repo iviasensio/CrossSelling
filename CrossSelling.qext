@@ -1,0 +1,9 @@
+{
+	"name" : "CrossSelling",
+	"description" : "Venn Diagram Example with 2 dimensions",
+	"icon" : "extension",
+	"type" : "visualization",
+	"version": "1.0",
+	"preview" : "CrossSelling.png",
+	"author": "Ivan Felipe Asensio"
+}
