@@ -376,26 +376,16 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			
 			function onClickClusterA()
 			{
-				
-				var SelectA = "";
-				for (var selA = 0;selA<arrayElemA.length;selA++)
-				{
-					SelectA = arrayElemA[selA];
-					self.backendApi.selectValues(0,[SelectA],true);
-				}
+				var SelectA = JSON.parse(JSON.stringify(arrayElemA));
+				self.backendApi.selectValues(0,SelectA,true);
 				$(this).toggleClass("selected");
 			
 			};
 			
 			function onClickClusterB()
 			{
-				
-				var SelectB = "";
-				for (var selB = 0;selB<arrayElemB.length;selB++)
-				{
-					SelectB = arrayElemB[selB];
-					self.backendApi.selectValues(0,[SelectB],true);
-				}
+				var SelectB = JSON.parse(JSON.stringify(arrayElemB));
+				self.backendApi.selectValues(0,SelectB,true);
 				$(this).toggleClass("selected");
 			
 			};
@@ -403,12 +393,8 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			function onClickClusterC()
 			{
 				
-				var SelectC = "";
-				for (var selC = 0;selC<arrayElemC.length;selC++)
-				{
-					SelectC = arrayElemC[selC];
-					self.backendApi.selectValues(0,[SelectC],true);
-				}
+				var SelectC = JSON.parse(JSON.stringify(arrayElemC));
+				self.backendApi.selectValues(0,SelectC,true);
 				$(this).toggleClass("selected");
 			
 			};
@@ -416,12 +402,8 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			function onClickClusterAB()
 			{
 				
-				var SelectAB = "";
-				for (var selAB = 0;selAB<arrayElemAB.length;selAB++)
-				{
-					SelectAB = arrayElemAB[selAB];
-					self.backendApi.selectValues(0,[SelectAB],true);
-				}
+				var SelectAB = JSON.parse(JSON.stringify(arrayElemAB));
+				self.backendApi.selectValues(0,SelectAB,true);
 				$(this).toggleClass("selected");
 			
 			};
@@ -429,12 +411,8 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			function onClickClusterAC()
 			{
 				
-				var SelectAC = "";
-				for (var selAC = 0;selAC<arrayElemAC.length;selAC++)
-				{
-					SelectAC = arrayElemAC[selAC];
-					self.backendApi.selectValues(0,[SelectAC],true);
-				}
+				var SelectAC = JSON.parse(JSON.stringify(arrayElemAC));
+				self.backendApi.selectValues(0,SelectAC,true);
 				$(this).toggleClass("selected");
 			
 			};
@@ -442,12 +420,8 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			function onClickClusterBC()
 			{
 				
-				var SelectBC = "";
-				for (var selBC = 0;selBC<arrayElemBC.length;selBC++)
-				{
-					SelectBC = arrayElemBC[selBC];
-					self.backendApi.selectValues(0,[SelectBC],true);
-				}
+				var SelectBC = JSON.parse(JSON.stringify(arrayElemBC));
+				self.backendApi.selectValues(0,SelectBC,true);
 				$(this).toggleClass("selected");
 			
 			};
@@ -455,12 +429,8 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			function onClickClusterABC()
 			{
 				
-				var SelectABC = "";
-				for (var selABC = 0;selABC<arrayElemABC.length;selABC++)
-				{
-					SelectABC = arrayElemABC[selABC];
-					self.backendApi.selectValues(0,[SelectABC],true);
-				}
+				var SelectABC = JSON.parse(JSON.stringify(arrayElemABC));
+				self.backendApi.selectValues(0,SelectABC,true);
 				$(this).toggleClass("selected");
 			
 			};
