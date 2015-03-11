@@ -2,14 +2,18 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties : {
-			version: 1.0,
+			version: 1.2,
+			//List of bugs fixed
+			//1.1 fast selection when you click on any number, with any amount of elements
+			//1.2 increase the maximum number of elements in first dimension up to 5000
+			
 			qHyperCubeDef : {
 				qDimensions : [],
 				qInitialDataFetch : [{
 					qTop: 0,
 					qLeft: 0,
-					qHeight: 1000,
-					qWidth: 3
+					qHeight: 5000,
+					qWidth: 2
 				}],
 			},
 			
