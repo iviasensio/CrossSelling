@@ -2,11 +2,7 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 	$("<style>").html(cssContent).appendTo("head");
 	return {
 		initialProperties : {
-			version: 1.2,
-			//List of bugs fixed
-			//1.1 fast selection when you click on any number, with any amount of elements
-			//1.2 increase the maximum number of elements in first dimension up to 5000
-			
+			version: 1.3,
 			qHyperCubeDef : {
 				qDimensions : [],
 				qInitialDataFetch : [{
@@ -76,8 +72,12 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			canTakeSnapshot : true
 		},
 		paint : function($element, layout) {
-			
-			var html = "";
+			var MaxSize = Math.min($element.width(), $element.height());
+			var Diameter = MaxSize * 0.65;
+			var Offset = MaxSize * 0.35;
+			var yWorking = MaxSize * 0.3;
+			var FontSizeWorking = Math.floor(MaxSize * 0.05);
+			var html = "<div id = 'Working' style = 'position:absolute;color:green;font-weight:bold;font-family: sans-serif;font-size: large;left:0px; top:" + yWorking.toString() + "px;font-size:" + FontSizeWorking.toString() + "px;'>Working...</div>";
 			var self = this, lastrow = 0;
 
 			var TotalCountA = 0, TotalCountB = 0, TotalCountC = 0, TotalCountAB = 0, TotalCountAC = 0, TotalCountBC = 0, TotalCountABC = 0 ;
@@ -108,9 +108,32 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 				numPrincipals.push(row[0].qText);
 				
 			});
-			
-			
 			var threeValues = numElements.filter(onlyUnique).sort();
+			
+			if (threeValues.length>3)
+			{
+				lastrow=this.backendApi.getRowCount() - 1;
+			}
+			if(this.backendApi.getRowCount() > lastrow +1)
+			{
+				var requestPage = [{
+				qTop: lastrow + 1,
+				qLeft: 0,
+				qWidth: 2, //should be # of columns
+				qHeight: Math.min( 5000, this.backendApi.getRowCount() - lastrow )
+				}];
+				this.backendApi.getData( requestPage ).then( function ( dataPages )
+				{
+				 //when we get the result trigger paint again
+					self.paint( $element );
+					
+				});
+			}
+			
+			
+			
+			
+			
 			var nPrincipals = numPrincipals.filter(onlyUnique);
 			var htmlFlag = "";
 					
@@ -203,13 +226,7 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 				}
 			}
 			
-			var TextA = (TotalCountA == 0) ? "":formatNumber(TotalCountA, layout.NumDecimals, layout.Thousands, layout.DecimalSep, layout.ThousandSep);
-			var TextB = (TotalCountB == 0) ? "":formatNumber(TotalCountB, layout.NumDecimals, layout.Thousands, layout.DecimalSep, layout.ThousandSep);
-			var TextC = (TotalCountC == 0) ? "":formatNumber(TotalCountC, layout.NumDecimals, layout.Thousands, layout.DecimalSep, layout.ThousandSep);
-			var TextAB = (TotalCountAB == 0) ? "":formatNumber(TotalCountAB, layout.NumDecimals, layout.Thousands, layout.DecimalSep, layout.ThousandSep);
-			var TextAC = (TotalCountAC == 0) ? "":formatNumber(TotalCountAC, layout.NumDecimals, layout.Thousands, layout.DecimalSep, layout.ThousandSep);
-			var TextBC = (TotalCountBC == 0) ? "":formatNumber(TotalCountBC, layout.NumDecimals, layout.Thousands, layout.DecimalSep, layout.ThousandSep);
-			var TextABC = (TotalCountABC == 0) ? "":formatNumber(TotalCountABC, layout.NumDecimals, layout.Thousands, layout.DecimalSep, layout.ThousandSep);
+			
 			var Error3Values = "Please select a maximum of 3 " + secondDimName + " ( currently " + threeValues.length + " )";
 			var TextLegendA = "",TextLegendB = "",TextLegendC = "";
 			switch (threeValues.length)
@@ -267,53 +284,51 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 				}
 			}
 			
-			var MaxSize = Math.min($element.width(), $element.height());
-			var Diameter = MaxSize * 0.65;
-			var Offset = MaxSize * 0.35;
+			
 			
 			// A text coordinates
-			var FontSizeOnlyA = Math.floor((MaxSize * 0.2) / TextA.length);
-			var xTextOnlyA = MaxSize * 0.05 + (MaxSize * 0.5 - TextA.length * FontSizeOnlyA) / 2;
+			var FontSizeOnlyA = Math.floor((MaxSize * 0.2) / TotalCountA.toString().length);
+			var xTextOnlyA = MaxSize * 0.05 + (MaxSize * 0.5 - TotalCountA.toString().length * FontSizeOnlyA) / 2;
 			var yTextOnlyA = MaxSize * 0.2;
 				
 			// B text coordinates
-			var FontSizeOnlyB = Math.floor((MaxSize * 0.2) / TextB.length);
-			var xTextOnlyB = MaxSize * 0.65 + (MaxSize * 0.5 - TextB.length * FontSizeOnlyB) / 2;
+			var FontSizeOnlyB = Math.floor((MaxSize * 0.2) / TotalCountB.toString().length);
+			var xTextOnlyB = MaxSize * 0.65 + (MaxSize * 0.5 - TotalCountB.toString().length * FontSizeOnlyB) / 2;
 			var yTextOnlyB = MaxSize * 0.2;
 			
 			// C text coordinates
-			var FontSizeOnlyC = Math.floor((MaxSize * 0.2) / TextC.length);
-			var xTextOnlyC = MaxSize * 0.3 + (MaxSize * 0.5 - TextC.length * FontSizeOnlyC) / 2;
+			var FontSizeOnlyC = Math.floor((MaxSize * 0.2) / TotalCountC.toString().length);
+			var xTextOnlyC = MaxSize * 0.3 + (MaxSize * 0.5 - TotalCountC.toString().length * FontSizeOnlyC) / 2;
 			var yTextOnlyC = MaxSize * 0.65;
 			
 			
 			// A * B text coordinates
 			if (threeValues.length==2)
 			{
-				var FontSizeAandB = Math.floor((MaxSize * 0.2) / TextAB.length);
-				var xTextAandB = MaxSize * 0.3 + (MaxSize * 0.5 - TextAB.length * FontSizeAandB) / 2;
+				var FontSizeAandB = Math.floor((MaxSize * 0.2) / TotalCountAB.toString().length);
+				var xTextAandB = MaxSize * 0.3 + (MaxSize * 0.5 - TotalCountAB.toString().length * FontSizeAandB) / 2;
 				var yTextAandB = MaxSize * 0.2;
 			}else
 			{
-				var FontSizeAandB = Math.floor((MaxSize * 0.2) / TextAB.length);
-				var xTextAandB = MaxSize * 0.30 + (MaxSize * 0.5 - TextAB.length * FontSizeAandB) / 2;
-				var yTextAandB = MaxSize * 0.07;	
+				var FontSizeAandB = Math.floor((MaxSize * 0.2) / TotalCountAB.toString().length);
+				var xTextAandB = MaxSize * 0.30 + (MaxSize * 0.5 - TotalCountAB.toString().length * FontSizeAandB) / 2;
+				var yTextAandB = MaxSize * 0.09;	
 			}
 			
 			
 			// A * C text coordinates
-			var FontSizeAandC = Math.floor((MaxSize * 0.2) / TextAC.length);
-			var xTextAandC = MaxSize * 0.10 + (MaxSize * 0.5 - TextAC.length * FontSizeAandC) / 2;
+			var FontSizeAandC = Math.floor((MaxSize * 0.2) / TotalCountAC.toString().length);
+			var xTextAandC = MaxSize * 0.10 + (MaxSize * 0.5 - TotalCountAC.toString().length * FontSizeAandC) / 2;
 			var yTextAandC = MaxSize * 0.45;
 			
 			// B * C text coordinates
-			var FontSizeBandC = Math.floor((MaxSize * 0.2) / TextBC.length);
-			var xTextBandC = MaxSize * 0.50 + (MaxSize * 0.5 - TextBC.length * FontSizeBandC) / 2;
+			var FontSizeBandC = Math.floor((MaxSize * 0.2) / TotalCountBC.toString().length);
+			var xTextBandC = MaxSize * 0.50 + (MaxSize * 0.5 - TotalCountBC.toString().length * FontSizeBandC) / 2;
 			var yTextBandC = MaxSize * 0.45;
 			
 			// A * B * C text coordinates
-			var FontSizeAandBandC = Math.floor((MaxSize * 0.2) / TextABC.length);
-			var xTextAandBandC = MaxSize * 0.3 + (MaxSize * 0.5 - TextABC.length * FontSizeAandBandC) / 2;
+			var FontSizeAandBandC = Math.floor((MaxSize * 0.2) / TotalCountABC.toString().length);
+			var xTextAandBandC = MaxSize * 0.3 + (MaxSize * 0.5 - TotalCountABC.toString().length * FontSizeAandBandC) / 2;
 			var yTextAandBandC = MaxSize * 0.35;
 			
 			// Error3Values text coordinates
@@ -341,20 +356,31 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			var midlePositionX = Offset.toString() / 2;
 			var midlePositionY = Offset.toString() * 0.75;
 			
-			
+			if(this.backendApi.getRowCount() == lastrow +1)
+			{
+				
+				html = "";
+				var TextA = formatNumber(TotalCountA);
+				var TextB = formatNumber(TotalCountB);
+				var TextC = formatNumber(TotalCountC);
+				var TextAB = formatNumber(TotalCountAB);
+				var TextAC = formatNumber(TotalCountAC);
+				var TextBC = formatNumber(TotalCountBC);
+				var TextABC = formatNumber(TotalCountABC);
+				
 			switch (threeValues.length)
 			{
 				case 1:
 					html += "<div class='OnlyA' title='" + threeValues[0] + ": " + TextA + " customers' style = 'position:absolute;left:0px;top:0px;width:" + Diameter.toString() + "px; height:" + Diameter.toString() + "px;'></div>";
-					html += "<div id = 'ClusterA' class='TextA'  style = 'position:absolute;left:" + xTextOnlyA.toString() + "px; top:" + yTextOnlyA.toString() + "px;font-size:" + FontSizeOnlyA.toString() + "px;'>" + TextA + "</div>";
+					html += "<div id = 'ClusterA'   style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextOnlyA.toString() + "px; top:" + yTextOnlyA.toString() + "px;font-size:" + FontSizeOnlyA.toString() + "px;'>" + TextA + "</div>";
 					html += "<div id = 'LegendA' class='TextLegendA' style = 'position:absolute;left:" + xTextLegendA.toString() + "px; top:" + yTextLegendA.toString() + "px;font-size:" + FontSizeLegendA.toString() + "px;'>" + TextLegendA + "</div>";
 					break;
 				case 2:
 					html += "<div class='OnlyA' title='" + threeValues[0] + ": " + TextA + " customers' style = 'position:absolute;left:0px;top:0px;width:" + Diameter.toString() + "px; height:" + Diameter.toString() + "px;'></div>";
 					html += "<div class='OnlyB' title='" + threeValues[1] + ": " + TextB + " customers' style = 'position:absolute;left:" + Offset.toString() + "px;top:0px;width:" + Diameter.toString() + "px; height:" + Diameter.toString() + "px;'></div>";
-					html += "<div id = 'ClusterA' class='TextA'  style = 'position:absolute;left:" + xTextOnlyA.toString() + "px; top:" + yTextOnlyA.toString() + "px;font-size:" + FontSizeOnlyA.toString() + "px;'>" + TextA + "</div>";
-					html += "<div id = 'ClusterB' class='TextB'  style = 'position:absolute;left:" + xTextOnlyB.toString() + "px; top:" + yTextOnlyB.toString() + "px;font-size:" + FontSizeOnlyB.toString() + "px;'>" + TextB + "</div>";
-					html += "<div id = 'ClusterAB' class='TextAB' style = 'position:absolute;left:" + xTextAandB.toString() + "px; top:" + yTextAandB.toString() + "px;font-size:" + FontSizeAandB.toString() + "px;'>" + TextAB + "</div>";
+					html += "<div id = 'ClusterA'   style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextOnlyA.toString() + "px; top:" + yTextOnlyA.toString() + "px;font-size:" + FontSizeOnlyA.toString() + "px;'>" + TextA + "</div>";
+					html += "<div id = 'ClusterB'   style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextOnlyB.toString() + "px; top:" + yTextOnlyB.toString() + "px;font-size:" + FontSizeOnlyB.toString() + "px;'>" + TextB + "</div>";
+					html += "<div id = 'ClusterAB'  style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextAandB.toString() + "px; top:" + yTextAandB.toString() + "px;font-size:" + FontSizeAandB.toString() + "px;'>" + TextAB + "</div>";
 					html += "<div id = 'LegendA' class='TextLegendA' style = 'position:absolute;left:" + xTextLegendA.toString() + "px; top:" + yTextLegendA.toString() + "px;font-size:" + FontSizeLegendA.toString() + "px;'>" + TextLegendA + "</div>";
 					html += "<div id = 'LegendB' class='TextLegendB' style = 'position:absolute;left:" + xTextLegendB.toString() + "px; top:" + yTextLegendB.toString() + "px;font-size:" + FontSizeLegendB.toString() + "px;'>" + TextLegendB + "</div>";
 					break;
@@ -362,13 +388,13 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 					html += "<div class='OnlyA' title='" + threeValues[0] + ": " + TextA + " customers' style = 'position:absolute;left:0px;top:0px;width:" + Diameter.toString() + "px; height:" + Diameter.toString() + "px;'></div>";
 					html += "<div class='OnlyB' title='" + threeValues[1] + ": " + TextB + " customers' style = 'position:absolute;left:" + Offset.toString() + "px;top:0px;width:" + Diameter.toString() + "px; height:" + Diameter.toString() + "px;'></div>";
 					html += "<div class='OnlyC' title='" + threeValues[2] + ": " + TextC + " customers' style = 'position:absolute;left:" + midlePositionX + "px;top:" + midlePositionY + "px;width:" + Diameter.toString() + "px; height:" + Diameter.toString() + "px;'></div>";
-					html += "<div id = 'ClusterA' class='TextA'  style = 'position:absolute;left:" + xTextOnlyA.toString() + "px; top:" + yTextOnlyA.toString() + "px;font-size:" + FontSizeOnlyA.toString() + "px;'>" + TextA + "</div>";
-					html += "<div id = 'ClusterB' class='TextB'  style = 'position:absolute;left:" + xTextOnlyB.toString() + "px; top:" + yTextOnlyB.toString() + "px;font-size:" + FontSizeOnlyB.toString() + "px;'>" + TextB + "</div>";
-					html += "<div id = 'ClusterC' class='TextC'  style = 'position:absolute;left:" + xTextOnlyC.toString() + "px; top:" + yTextOnlyC.toString() + "px;font-size:" + FontSizeOnlyC.toString() + "px;'>" + TextC + "</div>";
-					html += "<div id = 'ClusterAB' class='TextAB' style = 'position:absolute;left:" + xTextAandB.toString() + "px; top:" + yTextAandB.toString() + "px;font-size:" + FontSizeAandB.toString() + "px;'>" + TextAB + "</div>";
-					html += "<div id = 'ClusterAC' class='TextAC' style = 'position:absolute;left:" + xTextAandC.toString() + "px; top:" + yTextAandC.toString() + "px;font-size:" + FontSizeAandC.toString() + "px;'>" + TextAC + "</div>";
-					html += "<div id = 'ClusterBC' class='TextBC' style = 'position:absolute;left:" + xTextBandC.toString() + "px; top:" + yTextBandC.toString() + "px;font-size:" + FontSizeBandC.toString() + "px;'>" + TextBC + "</div>";
-					html += "<div id = 'ClusterABC' class='TextABC' style = 'position:absolute;left:" + xTextAandBandC.toString() + "px; top:" + yTextAandBandC.toString() + "px;font-size:" + FontSizeAandBandC.toString() + "px;'>" + TextABC + "</div>";
+					html += "<div id = 'ClusterA'   style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextOnlyA.toString() + "px; top:" + yTextOnlyA.toString() + "px;font-size:" + FontSizeOnlyA.toString() + "px;'>" + TextA + "</div>";
+					html += "<div id = 'ClusterB'   style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextOnlyB.toString() + "px; top:" + yTextOnlyB.toString() + "px;font-size:" + FontSizeOnlyB.toString() + "px;'>" + TextB + "</div>";
+					html += "<div id = 'ClusterC'   style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextOnlyC.toString() + "px; top:" + yTextOnlyC.toString() + "px;font-size:" + FontSizeOnlyC.toString() + "px;'>" + TextC + "</div>";
+					html += "<div id = 'ClusterAB'  style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextAandB.toString() + "px; top:" + yTextAandB.toString() + "px;font-size:" + FontSizeAandB.toString() + "px;'>" + TextAB + "</div>";
+					html += "<div id = 'ClusterAC'  style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextAandC.toString() + "px; top:" + yTextAandC.toString() + "px;font-size:" + FontSizeAandC.toString() + "px;'>" + TextAC + "</div>";
+					html += "<div id = 'ClusterBC'  style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextBandC.toString() + "px; top:" + yTextBandC.toString() + "px;font-size:" + FontSizeBandC.toString() + "px;'>" + TextBC + "</div>";
+					html += "<div id = 'ClusterABC' style = 'position:absolute;color:white;font-weight:bold;font-family: sans-serif;font-size: large;left:" + xTextAandBandC.toString() + "px; top:" + yTextAandBandC.toString() + "px;font-size:" + FontSizeAandBandC.toString() + "px;'>" + TextABC + "</div>";
 					html += "<div id = 'LegendA' class='TextLegendA' style = 'position:absolute;left:" + xTextLegendA.toString() + "px; top:" + yTextLegendA.toString() + "px;font-size:" + FontSizeLegendA.toString() + "px;'>" + TextLegendA + "</div>";
 					html += "<div id = 'LegendB' class='TextLegendB' style = 'position:absolute;left:" + xTextLegendB.toString() + "px; top:" + yTextLegendB.toString() + "px;font-size:" + FontSizeLegendB.toString() + "px;'>" + TextLegendB + "</div>";
 					html += "<div id = 'LegendC' class='TextLegendC' style = 'position:absolute;left:" + xTextLegendC.toString() + "px; top:" + yTextLegendC.toString() + "px;font-size:" + FontSizeLegendC.toString() + "px;'>" + TextLegendC + "</div>";
@@ -376,7 +402,7 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 				default:
 					html = "<div id = 'ClusterError3' class='Error3Values' style = 'position:absolute;left:" + xTextError3.toString() + "px; top:" + yTextError3.toString() + "px;font-size:" + FontSizeError3.toString() + "px;'>" + Error3Values + "</div>";
 			}
-				
+			}	
 			
 			function onClickClusterA()
 			{
