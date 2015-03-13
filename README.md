@@ -2,8 +2,12 @@ CrossSelling, a Qlik Sense Extension based on the Venn Analysis
 =============================
 ==================================
 
+Current version 1.3:
+- No elements number limit for the first dimension
+- Fast detection on errors
+- Working... message
 
-This extension is very useful for a cross selling analysis.
+This extension is very useful for a cross selling analysis.
 It's thought to identify sales oportunities in a very easy way.
 
 For example, you can identify those customers that use to buy 
