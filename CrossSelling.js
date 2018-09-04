@@ -31,6 +31,14 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 				sorting : {
 					uses : "sorting"
 				},
+				addons: {  
+				     uses: "addons",  
+				     items: {  
+				          dataHandling: {  
+				               uses: "dataHandling"  
+				          }  
+				     }  
+				},
 				settings: {
 					uses: "settings",
 					items: {
