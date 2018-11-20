@@ -80,6 +80,7 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			canTakeSnapshot : true
 		},
 		paint : function($element, layout) {
+			//console.log(this);
 			var MaxSize = Math.min($element.width(), $element.height());
 			var Diameter = MaxSize * 0.65;
 			var Offset = MaxSize * 0.35;
@@ -98,19 +99,15 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			$.each(this.backendApi.getDimensionInfos(), function(key, value) {
 				secondDimName = value.qFallbackTitle;
 			});
-			
-			
-			var multiArray = new Array();
-			
-			
+						
+			var multiArray = new Array();						
 			
 			this.backendApi.eachDataRow(function(rownum, row) {
 				lastrow = rownum;
-				
 				var Item = row[0].qText, Set = row[1].qText;
 				multiArray[lastrow] = new Array(2);
 				multiArray[lastrow][0] = row[0].qText;
-				multiArray[lastrow][1] = row[1].qText;
+				multiArray[lastrow][1] = row[1].qText;				
 				multiArray[lastrow][2] = row[0].qElemNumber;
 				numElements.push(row[1].qText);
 				numPrincipals.push(row[0].qText);
@@ -137,9 +134,6 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 					
 				});
 			}
-			
-			
-			
 			
 			
 			var nPrincipals = numPrincipals.filter(onlyUnique);
@@ -415,7 +409,7 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			function onClickClusterA()
 			{
 				var SelectA = JSON.parse(JSON.stringify(arrayElemA));
-				self.backendApi.selectValues(0,SelectA,true);
+				self.backendApi.selectValues(0,SelectA,false);
 				$(this).toggleClass("selected");
 			
 			};
@@ -423,7 +417,7 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			function onClickClusterB()
 			{
 				var SelectB = JSON.parse(JSON.stringify(arrayElemB));
-				self.backendApi.selectValues(0,SelectB,true);
+				self.backendApi.selectValues(0,SelectB,false);
 				$(this).toggleClass("selected");
 			
 			};
@@ -432,7 +426,7 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			{
 				
 				var SelectC = JSON.parse(JSON.stringify(arrayElemC));
-				self.backendApi.selectValues(0,SelectC,true);
+				self.backendApi.selectValues(0,SelectC,false);
 				$(this).toggleClass("selected");
 			
 			};
@@ -441,7 +435,7 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			{
 				
 				var SelectAB = JSON.parse(JSON.stringify(arrayElemAB));
-				self.backendApi.selectValues(0,SelectAB,true);
+				self.backendApi.selectValues(0,SelectAB,false);
 				$(this).toggleClass("selected");
 			
 			};
@@ -450,7 +444,7 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			{
 				
 				var SelectAC = JSON.parse(JSON.stringify(arrayElemAC));
-				self.backendApi.selectValues(0,SelectAC,true);
+				self.backendApi.selectValues(0,SelectAC,false);
 				$(this).toggleClass("selected");
 			
 			};
@@ -459,7 +453,7 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			{
 				
 				var SelectBC = JSON.parse(JSON.stringify(arrayElemBC));
-				self.backendApi.selectValues(0,SelectBC,true);
+				self.backendApi.selectValues(0,SelectBC,false);
 				$(this).toggleClass("selected");
 			
 			};
@@ -468,10 +462,33 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			{
 				
 				var SelectABC = JSON.parse(JSON.stringify(arrayElemABC));
-				self.backendApi.selectValues(0,SelectABC,true);
+				self.backendApi.selectValues(0,SelectABC,false);
+				console.log(SelectABC);
 				$(this).toggleClass("selected");
+				
 			
 			};
+			
+			function onClickLegendA()
+			{
+				
+				//alert("Hola");
+				tableToExcel('LegendA', 'W3C Example Table');
+				var tableToExcel = (function() {
+			
+				  var uri = 'data:application/vnd.ms-excel;base64,'
+				    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+				    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+				    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+				  return function(table, name) {
+				    if (!table.nodeType) table = document.getElementById(table)
+				    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+				    window.location.href = uri + base64(format(template, ctx))
+				  }
+				})()
+			};
+			
+			
 			
 			$element.html(html);
 			$element.find('#ClusterA').on('qv-activate', onClickClusterA);
@@ -481,6 +498,9 @@ define(["jquery", "text!./CrossSelling.css", "./CrossSellingHelper"], function($
 			$element.find('#ClusterAC').on('qv-activate', onClickClusterAC);
 			$element.find('#ClusterBC').on('qv-activate', onClickClusterBC);
 			$element.find('#ClusterABC').on('qv-activate', onClickClusterABC);
+			
+			$element.find('#LegendA').on('qv-activate', onClickLegendA);
+			
 			
 			
 			
